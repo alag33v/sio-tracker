@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { useSelector } from 'react-redux';
+import { GlobalStyle } from './styles/GlobalStyle';
+import { StyledApp } from './styles/StyledApp';
+import { AddNewTracker, Tracker } from './components';
 
-function App() {
+export const App = () => {
+  const { trackers, counter } = useSelector(state => state.time);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GlobalStyle />
+      <StyledApp>
+        <h1 className='title'>Tracker</h1>
+        <div className='wrapper'>
+          <div className='left'>
+            <AddNewTracker />
+            <ul className='list'>
+              {trackers.map(tracker => (
+                <Tracker key={tracker.id} {...tracker} />
+              ))}
+            </ul>
+          </div>
+          <div className='right'>
+            <h2>Total time</h2>
+            <div className='total-time'>
+              <span className='time'>
+                {('0' + Math.floor((counter / 3600000) % 60)).slice(-2)}
+              </span>
+              <span>:</span>
+              <span className='time'>
+                {('0' + Math.floor((counter / 60000) % 60)).slice(-2)}
+              </span>
+              <span>:</span>
+              <span className='time'>
+                {('0' + Math.floor((counter / 1000) % 60)).slice(-2)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </StyledApp>
+    </>
   );
-}
-
-export default App;
+};
